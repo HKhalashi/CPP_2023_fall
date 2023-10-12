@@ -1,0 +1,37 @@
+#include <iostream>
+#include <vector>
+#include <climits> 
+
+int minSubArrayLen(int target, std::vector<int>& nums) {
+    int left = 0, right = 0;
+    int sum = 0;
+    int minLength = INT_MAX;
+
+    while (right < nums.size()) {
+        sum += nums[right];
+        while (sum >= target) {
+            minLength = std::min(minLength, right - left + 1);
+            sum -= nums[left];
+            left++;
+        }
+        right++;
+    }
+
+    return minLength == INT_MAX ? 0 : minLength;
+}
+
+int main() {
+    int target1 = 7;
+    std::vector<int> nums1 = {2,3,1,2,4,3};
+    std::cout << minSubArrayLen(target1, nums1) << std::endl; 
+
+    int target2 = 4;
+    std::vector<int> nums2 = {1,4,4};
+    std::cout << minSubArrayLen(target2, nums2) << std::endl; 
+
+    int target3 = 11;
+    std::vector<int> nums3 = {1,1,1,1,1,1,1,1};
+    std::cout << minSubArrayLen(target3, nums3) << std::endl; 
+
+    return 0;
+}
