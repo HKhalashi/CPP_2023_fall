@@ -1,0 +1,55 @@
+// 2801. Count Stepping Numbers in Range
+#include <iostream>
+#include <queue>
+#include <string>
+
+class Solution {
+public:
+    int countSteppingNumbers(std::string low, std::string high) {
+        const int MOD = 1000000007;
+        long long l = std::stoll(low);
+        long long h = std::stoll(high);
+        int count = 0;
+
+        std::queue<long long> q;
+        for (int i = 1; i <= 9; ++i) {
+            q.push(i);
+        }
+
+        if (l == 0) {
+            count++;
+        }
+
+        while (!q.empty()) {
+            long long curr = q.front();
+            q.pop();
+
+            if (curr >= l && curr <= h) {
+                count = (count + 1) % MOD;
+            }
+
+            if (curr > h) {
+                continue;
+            }
+
+            int lastDigit = curr % 10;
+            if (lastDigit > 0) {
+                q.push(curr * 10 + (lastDigit - 1));
+            }
+            if (lastDigit < 9) {
+                q.push(curr * 10 + (lastDigit + 1));
+            }
+        }
+
+        return count;
+    }
+};
+
+int main() {
+    Solution sol;
+    
+    std::cout << "Count of Stepping Numbers in range [1, 11]: " << sol.countSteppingNumbers("1", "11") << std::endl; // Expected output: 10
+    std::cout << "Count of Stepping Numbers in range [90, 101]: " << sol.countSteppingNumbers("90", "101") << std::endl; // Expected output: 2
+
+    return 0;
+}
