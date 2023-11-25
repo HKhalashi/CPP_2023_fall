@@ -1,0 +1,67 @@
+//210. Course Schedule II
+#include <iostream>
+#include <vector>
+#include <queue>
+
+class Solution {
+public:
+    std::vector<int> findOrder(int numCourses, std::vector<std::vector<int>>& prerequisites) {
+        std::vector<int> inDegree(numCourses, 0);
+        std::vector<std::vector<int>> graph(numCourses);
+        for (const auto& pre : prerequisites) {
+            graph[pre[1]].push_back(pre[0]);
+            inDegree[pre[0]]++;
+        }
+
+        std::queue<int> q;
+        for (int i = 0; i < numCourses; i++) {
+            if (inDegree[i] == 0) {
+                q.push(i);
+            }
+        }
+
+        std::vector<int> order;
+        while (!q.empty()) {
+            int course = q.front();
+            q.pop();
+            order.push_back(course);
+
+            for (int neighbor : graph[course]) {
+                if (--inDegree[neighbor] == 0) {
+                    q.push(neighbor);
+                }
+            }
+        }
+
+        if (order.size() == numCourses) {
+            return order;
+        } else {
+            return {};
+        }
+    }
+};
+
+int main() {
+    
+    std::vector<std::vector<int>> prerequisites1 = {{1, 0}};
+    Solution sol;
+    auto order1 = sol.findOrder(2, prerequisites1);
+    std::cout << "Course Order (Test 1): ";
+    for (int course : order1) {
+        std::cout << course << " ";
+    }
+    std::cout << std::endl;
+
+    
+    std::vector<std::vector<int>> prerequisites2 = {{1, 0}, {2, 0}, {3, 1}, {3, 2}};
+    auto order2 = sol.findOrder(4, prerequisites2);
+    std::cout << "Course Order (Test 2): ";
+    for (int course : order2) {
+        std::cout << course << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+
+
