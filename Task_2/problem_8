@@ -1,0 +1,36 @@
+//242. Valid Anagram
+#include <iostream>
+#include <string>
+#include <vector>
+
+bool isAnagram(std::string s, std::string t) {
+    if (s.length() != t.length()) {
+        return false;
+    }
+
+    std::vector<int> charCount(26, 0);
+
+    for (char c : s) {
+        charCount[c - 'a']++;
+    }
+
+    for (char c : t) {
+        if (--charCount[c - 'a'] < 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int main() {
+   
+    std::string s1 = "anagram", t1 = "nagaram";
+    std::cout << "Is Anagram (Test 1): " << (isAnagram(s1, t1) ? "true" : "false") << std::endl;  // expected output: true
+
+
+    std::string s2 = "rat", t2 = "car";
+    std::cout << "Is Anagram (Test 2): " << (isAnagram(s2, t2) ? "true" : "false") << std::endl;  // expected output: false
+
+    return 0;
+}
