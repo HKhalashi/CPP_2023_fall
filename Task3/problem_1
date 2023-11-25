@@ -1,0 +1,49 @@
+//Range Sum Query - Mutable
+#include <vector>
+#include <iostream>
+
+class NumArray {
+private:
+    std::vector<int> nums;
+    std::vector<int> cumSum;
+
+public:
+    NumArray(std::vector<int>& nums) {
+        this->nums = nums;
+        cumSum.resize(nums.size() + 1);
+        cumSum[0] = 0;
+        for (int i = 1; i <= nums.size(); ++i) {
+            cumSum[i] = cumSum[i - 1] + nums[i - 1];
+        }
+    }
+
+    void update(int index, int val) {
+        int diff = val - nums[index];
+        nums[index] = val;
+        for (int i = index + 1; i < cumSum.size(); ++i) {
+            cumSum[i] += diff;
+        }
+    }
+
+    int sumRange(int left, int right) {
+        return cumSum[right + 1] - cumSum[left];
+    }
+};
+
+int main() {
+    std::vector<int> nums = {1, 3, 5};
+    NumArray numArray(nums);
+
+
+    std::cout << "Sum Range (0, 2): " << numArray.sumRange(0, 2) << std::endl;
+
+
+    numArray.update(1, 2); // nums = [1, 2, 5]
+    std::cout << "Updated index 1 to value 2" << std::endl;
+
+
+    std::cout << "Sum Range (0, 2): " << numArray.sumRange(0, 2) << std::endl; 
+
+
+    return 0;
+}
