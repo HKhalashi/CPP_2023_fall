@@ -1,0 +1,36 @@
+//137. Single Number II
+#include <iostream>
+#include <vector>
+
+int singleNumber(std::vector<int>& nums) {
+    int bitCount[32] = {0};
+    int result = 0;
+
+    for (int num : nums) {
+        for (int i = 0; i < 32; ++i) {
+            if (num & (1 << i)) {
+                bitCount[i]++;
+            }
+        }
+    }
+
+    for (int i = 0; i < 32; ++i) {
+        if (bitCount[i] % 3) {
+            result |= (1 << i);
+        }
+    }
+
+    return result;
+}
+
+int main() {
+    // Test case 1
+    std::vector<int> nums1 = {2, 2, 3, 2};
+    std::cout << "Single Number (Test 1): " << singleNumber(nums1) << std::endl;  // expected output: 3
+
+    // Test case 2
+    std::vector<int> nums2 = {0, 1, 0, 1, 0, 1, 99};
+    std::cout << "Single Number (Test 2): " << singleNumber(nums2) << std::endl;  // expected output: 99
+
+    return 0;
+}
