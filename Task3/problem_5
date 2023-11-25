@@ -1,0 +1,58 @@
+#include <vector>
+#include <iostream>
+#include <climits>
+
+class NumArray {
+private:
+    std::vector<int> arr;
+
+public:
+    NumArray(std::vector<int>& nums) : arr(nums) {}
+
+    int get(int i) {
+        return arr[i - 1];
+    }
+
+    void update(int l, int r, int x) {
+        for (int i = l - 1; i < r; ++i) {
+            arr[i] = x;
+        }
+    }
+
+    void add(int l, int r, int x) {
+        for (int i = l - 1; i < r; ++i) {
+            arr[i] += x;
+        }
+    }
+
+    int rsq(int l, int r) {
+        int sum = 0;
+        for (int i = l - 1; i < r; ++i) {
+            sum += arr[i];
+        }
+        return sum;
+    }
+
+    int rmq(int l, int r) {
+        int min = INT_MAX;
+        for (int i = l - 1; i < r; ++i) {
+            if (arr[i] < min) {
+                min = arr[i];
+            }
+        }
+        return min;
+    }
+};
+
+int main() {
+    std::vector<int> nums = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    NumArray numArray(nums);
+    
+    std::cout << "RSQ (1, 10): " << numArray.rsq(1, 10) << std::endl; // expected output: 55
+    numArray.update(5, 6, 2);
+    std::cout << "RMQ (3, 9): " << numArray.rmq(3, 9) << std::endl; // expected output: 2
+    numArray.add(2, 8, 3);
+    std::cout << "GET (7): " << numArray.get(7) << std::endl; // expected output: 10
+
+    return 0;
+}
