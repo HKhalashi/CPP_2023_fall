@@ -1,0 +1,48 @@
+//34. Find First and Last Position of Element in Sorted Array
+
+#include <iostream>
+#include <vector>
+int binarySearch(const std::vector<int>& nums, int target, bool findFirst) {
+    int left = 0, right = nums.size(), mid;
+    while (left < right) {
+        mid = left + (right - left) / 2;
+        if (nums[mid] > target || (findFirst && nums[mid] == target)) {
+            right = mid;
+        } else {
+            left = mid + 1;
+        }
+    }
+    return left;
+}
+
+std::vector<int> searchRange(std::vector<int>& nums, int target) {
+    int left = binarySearch(nums, target, true);
+    if (left == nums.size() || nums[left] != target) {
+        return {-1, -1};
+    }
+    int right = binarySearch(nums, target, false) - 1;
+    return {left, right};
+}
+
+
+int main() {
+    // Test case 1
+    std::vector<int> nums1 = {5, 7, 7, 8, 8, 10};
+    int target1 = 8;
+    auto result1 = searchRange(nums1, target1);
+    std::cout << "Range (Test 1): [" << result1[0] << ", " << result1[1] << "]" << std::endl;  // Expected output: [3, 4]
+
+    // Test case 2
+    std::vector<int> nums2 = {5, 7, 7, 8, 8, 10};
+    int target2 = 6;
+    auto result2 = searchRange(nums2, target2);
+    std::cout << "Range (Test 2): [" << result2[0] << ", " << result2[1] << "]" << std::endl;  // Expected output: [-1, -1]
+
+    // Test case 3
+    std::vector<int> nums3 = {};
+    int target3 = 0;
+    auto result3 = searchRange(nums3, target3);
+    std::cout << "Range (Test 3): [" << result3[0] << ", " << result3[1] << "]" << std::endl;  // Expected output: [-1, -1]
+
+    return 0;
+}
