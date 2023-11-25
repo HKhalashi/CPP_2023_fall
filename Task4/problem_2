@@ -1,0 +1,26 @@
+// 201. Bitwise AND of Numbers Range
+#include <iostream>
+
+class Solution {
+public:
+    int rangeBitwiseAnd(int left, int right) {
+        int shift = 0;
+
+        while (left < right) {
+            left >>= 1;
+            right >>= 1;
+            ++shift;
+        }
+        return left << shift;
+    }
+};
+
+int main() {
+    Solution sol;
+    
+    std::cout << "Bitwise AND of range [5, 7]: " << sol.rangeBitwiseAnd(5, 7) << std::endl; // expected output: 4
+    std::cout << "Bitwise AND of range [0, 0]: " << sol.rangeBitwiseAnd(0, 0) << std::endl; // expected output: 0
+    std::cout << "Bitwise AND of range [1, 2147483647]: " << sol.rangeBitwiseAnd(1, 2147483647) << std::endl; // expected output: 0
+
+    return 0;
+}
