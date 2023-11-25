@@ -1,0 +1,56 @@
+//106. Construct Binary Tree from Inorder and Postorder Traversal
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+struct TreeNode {
+    int val;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+};
+
+class Solution {
+public:
+    TreeNode* buildTree(std::vector<int>& inorder, std::vector<int>& postorder) {
+        std::unordered_map<int, int> inorderMap;
+        for (int i = 0; i < inorder.size(); i++) {
+            inorderMap[inorder[i]] = i;
+        }
+        return buildTreeRecursive(inorder, 0, inorder.size() - 1, postorder, 0, postorder.size() - 1, inorderMap);
+    }
+
+private:
+    TreeNode* buildTreeRecursive(std::vector<int>& inorder, int inStart, int inEnd, std::vector<int>& postorder, int postStart, int postEnd, std::unordered_map<int, int>& inorderMap) {
+        if (postStart > postEnd || inStart > inEnd) return nullptr;
+
+        TreeNode* root = new TreeNode(postorder[postEnd]);
+        int inRoot = inorderMap[root->val];
+        int numsLeft = inRoot - inStart;
+
+        root->left = buildTreeRecursive(inorder, inStart, inRoot - 1, postorder, postStart, postStart + numsLeft - 1, inorderMap);
+        root->right = buildTreeRecursive(inorder, inRoot + 1, inEnd, postorder, postStart + numsLeft, postEnd - 1, inorderMap);
+
+        return root;
+    }
+};
+
+// Helper function to print the tree in pre-order traversal
+void printPreorder(TreeNode* node) {
+    if (node == nullptr) return;
+    std::cout << node->val << " ";
+    printPreorder(node->left);
+    printPreorder(node->right);
+}
+
+int main() {
+    std::vector<int> inorder = {9,3,15,20,7};
+    std::vector<int> postorder = {9,15,7,20,3};
+    Solution sol;
+    TreeNode* root = sol.buildTree(inorder, postorder);
+
+    // Printing the tree in pre-order traversal
+    printPreorder(root);  // Expected output: 3 9 20 15 7
+    return 0;
+}
+
+
