@@ -1,0 +1,45 @@
+//71. Simplify Path
+#include <iostream>
+#include <sstream>
+#include <stack>
+#include <string>
+#include <vector>
+
+std::string simplifyPath(std::string path) {
+    std::istringstream iss(path);
+    std::stack<std::string> st;
+    std::string item;
+
+    while (getline(iss, item, '/')) {
+        if (item == "..") {
+            if (!st.empty()) {
+                st.pop();
+            }
+        } else if (!item.empty() && item != ".") {
+            st.push(item);
+        }
+    }
+
+    std::string result = "";
+    while (!st.empty()) {
+        result = "/" + st.top() + result;
+        st.pop();
+    }
+
+    return result.empty() ? "/" : result;
+}
+
+int main() {
+    
+    std::string path1 = "/home/";
+    std::cout << "Simplified Path (Test 1): " << simplifyPath(path1) << std::endl;  // expected output: "/home"
+
+    std::string path2 = "/../";
+    std::cout << "Simplified Path (Test 2): " << simplifyPath(path2) << std::endl;  // expected output: "/"
+
+
+    std::string path3 = "/home//foo/";
+    std::cout << "Simplified Path (Test 3): " << simplifyPath(path3) << std::endl;  // expected output: "/home/foo"
+
+    return 0;
+}
