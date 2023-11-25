@@ -1,0 +1,63 @@
+//306. Additive Number
+#include <iostream>
+#include <string>
+
+class Solution {
+public:
+    bool isAdditiveNumber(std::string num) {
+        int n = num.length();
+        for (int i = 1; i <= n / 2; ++i) {
+            for (int j = 1; j <= (n - i) / 2; ++j) {
+                if (check(num.substr(0, i), num.substr(i, j), num.substr(i + j))) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+private:
+    bool check(const std::string& num1, const std::string& num2, const std::string& remaining) {
+        if ((num1.size() > 1 && num1[0] == '0') || (num2.size() > 1 && num2[0] == '0')) {
+            return false;
+        }
+        std::string sum = addStrings(num1, num2);
+        if (remaining == sum) {
+            return true;
+        }
+        if (remaining.size() < sum.size() || sum != remaining.substr(0, sum.size())) {
+            return false;
+        }
+        return check(num2, sum, remaining.substr(sum.size()));
+    }
+
+    std::string addStrings(const std::string& num1, const std::string& num2) {
+        std::string result;
+        int carry = 0;
+        int i = num1.size() - 1, j = num2.size() - 1;
+        while (i >= 0 || j >= 0 || carry) {
+            int sum = carry;
+            if (i >= 0) {
+                sum += num1[i--] - '0';
+            }
+            if (j >= 0) {
+                sum += num2[j--] - '0';
+            }
+            carry = sum / 10;
+            result.insert(result.begin(), sum % 10 + '0');
+        }
+        return result;
+    }
+};
+
+int main() {
+    Solution solution;
+    
+    std::cout << "Input: \"112358\"\n";
+    std::cout << "Output: " << (solution.isAdditiveNumber("112358") ? "true" : "false") << std::endl;
+    
+    std::cout << "Input: \"199100199\"\n";
+    std::cout << "Output: " << (solution.isAdditiveNumber("199100199") ? "true" : "false") << std::endl;
+
+    return 0;
+}
